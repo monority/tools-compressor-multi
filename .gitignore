@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual Environment
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+*.cov
+
+# OS
+Thumbs.db
+Desktop.ini
+$DISPLAY
+
+# Project specific
+examples/test_samples/out*
+examples/test_samples/demo*
+*.gz
+*.7z
+*.webp
+*.pdf.bak

@@ -1,0 +1,60 @@
+# Compression quality presets (dynamic per format)
+presets:
+  pdf:
+    fast:
+      dpi: 72
+      quality: /screen
+      compress_fonts: false
+      linearize: false
+    balanced:
+      dpi: 150
+      quality: /ebook
+      compress_fonts: true
+      linearize: false
+    best:
+      dpi: 300
+      quality: /prepress
+      compress_fonts: true
+      subset_fonts: true
+      linearize: true
+  image:
+    fast:
+      jpg_quality: 80
+      resize: null
+      convert: null
+    balanced:
+      jpg_quality: 60
+      resize: null
+      convert: null
+    best:
+      jpg_quality: 40
+      resize: null
+      convert: webp
+  archive:
+    fast:
+      format: zip
+      level: 1
+    balanced:
+      format: zip
+      level: 6
+    best:
+      format: 7z
+      level: 9
+  document:
+    fast:
+      compress_images: true
+      image_quality: 70
+    balanced:
+      compress_images: true
+      image_quality: 50
+    best:
+      compress_images: true
+      image_quality: 30
+      remove_metadata: true
+
+# General settings
+settings:
+  max_workers: 0  # 0 = auto (os.cpu_count())
+  skip_existing: true
+  hash_algo: sha256
+  report_formats: [table, json]
