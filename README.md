@@ -1,4 +1,7 @@
 # Compressor-Multi
+
+![Compressor](./Compressor.png)
+
 Multi-format file compressor with dynamic quality presets. Pure Python, zero external tools required.
 
 ## Features

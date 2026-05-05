@@ -32,6 +32,10 @@ $DISPLAY
 # Project specific
 examples/test_samples/out*
 examples/test_samples/demo*
+
+# Output directory (generated compressed files)
+output/
+input/
 *.gz
 *.7z
 *.webp
