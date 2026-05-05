@@ -1,6 +1,11 @@
-# Compressor-Multi
+<h1 align="center">
+Compressor-Multi
+</h1>
 
-![Compressor](./Compressor.png)
+
+<p align="center">
+  <img src="./Compressor.png" />
+</p>
 
 Multi-format file compressor with dynamic quality presets. Pure Python, zero external tools required.
 
