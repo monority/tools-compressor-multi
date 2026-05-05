@@ -14,9 +14,20 @@ Multi-format file compressor with dynamic quality presets. Pure Python, zero ext
 - **Images**: JPG/PNG/WebP/AVIF with quality adjustment and format conversion
 - **Archives**: ZIP/7Z/TAR with compression levels
 - **Documents**: DOCX/XLSX internal image compression
-- **Interactive CLI**: Prompts when flags missing, Rich progress bars
+- **Interactive Menu**: `compress menu` for guided file selection
 - **Batch Processing**: Concurrent workers, recursive directory scan
 - **Reports**: Compression ratios, time, JSON export
+
+## Interactive Menu
+```bash
+compress menu
+```
+Options:
+1. Select and compress a single file
+2. Compress all files in input directory
+3. Compress files in a specific directory
+4. Show supported formats
+5. Exit
 
 ## Installation (Windows)
 ```powershell
@@ -29,6 +40,9 @@ pip install -e ".[dev]"
 
 ## Usage
 ```bash
+# Interactive menu mode
+compress menu
+
 # Compress single file (interactive prompts)
 compress file.pdf
 
