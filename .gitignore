@@ -35,8 +35,8 @@ examples/test_samples/demo*
 
 # Output directory (generated compressed files)
 output/
-input/
+
+# Compressed files
 *.gz
 *.7z
-*.webp
 *.pdf.bak
