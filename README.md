@@ -10,13 +10,13 @@ Compressor-Multi
 Multi-format file compressor with dynamic quality presets. Pure Python, zero external tools required.
 
 ## Features
-- **PDF Priority**: Downsampling, font compression, PDF/A conversion via PyMuPDF
+- **PDF Priority**: Image downsampling, font deflate, linearized output via PyMuPDF
 - **Images**: JPG/PNG/WebP/AVIF with quality adjustment and format conversion
-- **Archives**: ZIP/7Z/TAR with compression levels
+- **Archives**: ZIP/7Z/TAR.GZ with compression levels
 - **Documents**: DOCX/XLSX internal image compression
 - **Interactive Menu**: `compress menu` for guided file selection
 - **Batch Processing**: Concurrent workers, recursive directory scan
-- **Reports**: Compression ratios, time, JSON export
+- **Reports**: Compression ratios, time, optional JSON export
 
 ## Interactive Menu
 ```bash
@@ -48,6 +48,9 @@ compress file.pdf
 
 # With flags
 compress file.pdf -q best -o output.pdf
+
+# JSON report
+compress ./docs -b -q balanced --report-json report.json
 
 # Batch directory
 compress ./docs -b -q balanced -w 4

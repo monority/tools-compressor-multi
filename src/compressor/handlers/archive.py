@@ -1,12 +1,14 @@
 from pathlib import Path
 from typing import Any
-import zipfile
+import gzip
 import tarfile
+import zipfile
 
 def compress_archive(src: Path, dst: Path, opts: dict[str, Any]) -> Path:
-    """Compress using std lib or zstandard/py7zr."""
-    fmt = opts.get("format", "zip")
+    """Compress using std lib or py7zr."""
+    fmt = str(opts.get("format", "zip")).lower()
     level = opts.get("level", 6)
+    dst.parent.mkdir(parents=True, exist_ok=True)
     if fmt == "7z":
         try:
             import py7zr
@@ -23,9 +25,8 @@ def compress_archive(src: Path, dst: Path, opts: dict[str, Any]) -> Path:
         return out
     elif fmt in ("tar.gz", "tgz"):
         out = dst.with_suffix(".tar.gz")
-        import gzip
-        with open(src, 'rb') as f_in:
-            with gzip.open(out, 'wb', compresslevel=level) as f_out:
-                f_out.write(f_in.read())
+        with gzip.open(out, 'wb', compresslevel=level) as f_out:
+            with tarfile.open(fileobj=f_out, mode='w') as tf:
+                tf.add(src, arcname=src.name)
         return out
     raise ValueError(f"Unsupported archive format: {fmt}")

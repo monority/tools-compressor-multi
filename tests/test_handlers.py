@@ -1,6 +1,6 @@
 import pytest
 from pathlib import Path
-import tempfile
+import tarfile
 
 def test_pdf_compress(tmp_path):
     try:
@@ -40,3 +40,14 @@ def test_archive_compress(tmp_path):
     result = compress_archive(src, tmp_path / "out.zip", {"format": "zip", "level": 6})
     assert result.exists()
     assert result.stat().st_size < src.stat().st_size
+
+
+def test_archive_tar_gz_contains_file(tmp_path):
+    src = tmp_path / "test.txt"
+    src.write_text("hello tar")
+    from compressor.handlers.archive import compress_archive
+    result = compress_archive(src, tmp_path / "out.tar.gz", {"format": "tar.gz", "level": 6})
+    assert result.exists()
+    with tarfile.open(result, "r:gz") as archive:
+        names = archive.getnames()
+    assert names == ["test.txt"]

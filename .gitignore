@@ -36,7 +36,8 @@ examples/test_samples/demo*
 # Output directory (generated compressed files)
 output/
 
-# Compressed files
+# Compressed files (except logo)
 *.gz
 *.7z
 *.pdf.bak
+!logo-compressor.webp
