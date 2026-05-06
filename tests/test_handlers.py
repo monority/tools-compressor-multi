@@ -19,6 +19,24 @@ def test_pdf_compress(tmp_path):
     assert result.exists()
     assert result.stat().st_size > 0
 
+
+def test_pdf_compress_ignores_unsupported_linearization(tmp_path):
+    try:
+        import fitz
+    except ImportError:
+        pytest.skip("PyMuPDF not installed")
+    src = tmp_path / "test.pdf"
+    doc = fitz.open()
+    page = doc.new_page()
+    page.insert_text((50, 50), "Hello World")
+    doc.save(str(src))
+    doc.close()
+    from compressor.handlers.pdf import compress_pdf
+    dst = tmp_path / "out.pdf"
+    result = compress_pdf(src, dst, {"dpi": 72, "linearize": True})
+    assert result.exists()
+    assert result.stat().st_size > 0
+
 def test_image_compress(tmp_path):
     try:
         from PIL import Image

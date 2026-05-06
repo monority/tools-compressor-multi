@@ -10,7 +10,7 @@ Compressor-Multi
 Multi-format file compressor with dynamic quality presets. Pure Python, zero external tools required.
 
 ## Features
-- **PDF Priority**: Image downsampling, font deflate, linearized output via PyMuPDF
+- **PDF Priority**: Image downsampling, font deflate, optimized output via PyMuPDF
 - **Images**: JPG/PNG/WebP/AVIF with quality adjustment and format conversion
 - **Archives**: ZIP/7Z/TAR.GZ with compression levels
 - **Documents**: DOCX/XLSX internal image compression

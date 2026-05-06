@@ -42,9 +42,21 @@ def compress_pdf(src: Path, dst: Path, opts: dict[str, Any]) -> Path:
         if linearize:
             save_kwargs["linear"] = True
         try:
-            doc.save(str(dst), **save_kwargs, deflate_images=True, deflate_fonts=compress_fonts)
-        except TypeError:
-            doc.save(str(dst), **save_kwargs)
+            try:
+                doc.save(str(dst), **save_kwargs, deflate_images=True, deflate_fonts=compress_fonts)
+            except TypeError:
+                doc.save(str(dst), **save_kwargs)
+        except Exception as exc:
+            if not linearize or "Linearisation is no longer supported" not in str(exc):
+                raise
+            logger.debug("PDF linearization unsupported by this PyMuPDF version; saving without it")
+            if dst.exists():
+                dst.unlink()
+            save_kwargs.pop("linear", None)
+            try:
+                doc.save(str(dst), **save_kwargs, deflate_images=True, deflate_fonts=compress_fonts)
+            except TypeError:
+                doc.save(str(dst), **save_kwargs)
     finally:
         doc.close()
     if not dst.exists():

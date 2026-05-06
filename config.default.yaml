@@ -16,7 +16,7 @@ presets:
       quality: /prepress
       compress_fonts: true
       subset_fonts: true
-      linearize: true
+      linearize: false
   image:
     fast:
       jpg_quality: 80

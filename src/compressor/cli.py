@@ -1,15 +1,21 @@
 import typer
+from optparse import OptionParser, OptionValueError
 from rich.console import Console
 from rich.table import Table
 from rich.prompt import Prompt, Confirm
 from pathlib import Path
+import sys
 from typing import Optional
 
 from compressor.core import detect_format, compress_file, compress_batch, resolve_output_path
 from compressor.models import MenuAction
 from compressor.report import export_json, print_batch_report, print_result
 
-app = typer.Typer(help="Multi-format file compressor")
+app = typer.Typer(
+    help="Multi-format file compressor",
+    invoke_without_command=True,
+    context_settings={"allow_extra_args": True, "ignore_unknown_options": True},
+)
 console = Console()
 
 
@@ -73,6 +79,46 @@ def compress_directory_files(input_dir: Path, output_dir: Path, quality: str, re
 def write_report(report_json: Optional[Path], results: list[dict]) -> None:
     if report_json:
         export_json(results, report_json)
+
+
+def parse_default_args(args: list[str]) -> dict:
+    parser = OptionParser(add_help_option=False)
+    parser.add_option("-o", "--output", dest="output")
+    parser.add_option("-q", "--quality", dest="quality", default="balanced")
+    parser.add_option("-f", "--format", dest="format")
+    parser.add_option("-b", "--batch", dest="batch", action="store_true", default=False)
+    parser.add_option("-w", "--workers", dest="workers", type="int", default=0)
+    parser.add_option("-i", "--interactive", dest="interactive", action="store_true", default=False)
+    parser.add_option("--report-json", dest="report_json")
+
+    try:
+        opts, remaining = parser.parse_args(args)
+    except (OptionValueError, SystemExit) as exc:
+        raise typer.BadParameter(str(exc)) from exc
+
+    input_path = Path(remaining[0]) if remaining else None
+    if len(remaining) > 1:
+        raise typer.BadParameter(f"unexpected argument: {remaining[1]}")
+
+    return {
+        "input_path": input_path,
+        "output": Path(opts.output) if opts.output else None,
+        "quality": opts.quality,
+        "format": opts.format,
+        "batch": opts.batch,
+        "workers": opts.workers,
+        "interactive": opts.interactive,
+        "report_json": Path(opts.report_json) if opts.report_json else None,
+    }
+
+
+@app.callback()
+def main(ctx: typer.Context) -> None:
+    if ctx.invoked_subcommand is not None:
+        return
+
+    params = parse_default_args(list(ctx.args))
+    compress_impl(**params)
 
 
 def run_menu_action(action: MenuAction, input_dir: Path, output_dir: Path) -> Optional[str]:
@@ -203,6 +249,20 @@ def compress_impl(
         write_report(report_json, results)
     else:
         console.print("[red]Invalid input path[/red]")
+
+
+_typer_app = app
+typer_app = _typer_app
+
+
+def app(args: Optional[list[str]] = None) -> None:
+    args = list(sys.argv[1:] if args is None else args)
+    if args and args[0] in {"menu", "compress", "--help", "--install-completion", "--show-completion"}:
+        _typer_app(args=args)
+        return
+
+    params = parse_default_args(args)
+    compress_impl(**params)
 
 
 if __name__ == "__main__":

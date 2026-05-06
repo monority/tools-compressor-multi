@@ -53,3 +53,17 @@ def test_compress_writes_report_json(tmp_path, monkeypatch):
 
     assert seen["report_json"] == report
     assert seen["results"][0]["src"] == str(src)
+
+
+def test_app_accepts_readme_style_command(tmp_path, monkeypatch):
+    src = tmp_path / "file.txt"
+    src.write_text("hello")
+    seen = {}
+
+    monkeypatch.setattr(cli, "compress_impl", lambda **kwargs: seen.update(kwargs))
+
+    cli.app([str(src), "-q", "fast", "-o", str(tmp_path / "out.txt")])
+
+    assert seen["input_path"] == src
+    assert seen["quality"] == "fast"
+    assert seen["output"] == tmp_path / "out.txt"
