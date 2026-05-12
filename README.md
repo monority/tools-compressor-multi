@@ -4,7 +4,7 @@ Compressor-Multi
 
 
 <p align="center">
-  <img src="./logo-compressor.webp" width="200"/>
+  <img src="./logo-compressor.svg" width="120"/>
 </p>
 
 Multi-format file compressor with dynamic quality presets. Pure Python, zero external tools required.
