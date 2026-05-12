@@ -98,13 +98,17 @@ def file_hash(filepath: Path, algo: str = "sha256") -> str:
     return h.hexdigest()
 
 
+_GZIP_LEVELS: dict[str, int] = {"fast": 1, "balanced": 6, "best": 9}
+
+
 def _compress_generic(src: Path, dst: Path | None, quality: str) -> dict:
+    level = _GZIP_LEVELS.get(quality, 6)
     dst = dst or src.with_suffix(src.suffix + ".gz")
     try:
         dst.parent.mkdir(parents=True, exist_ok=True)
         start = time.perf_counter()
         with open(src, "rb") as f_in:
-            with gzip.open(dst, "wb", compresslevel=6) as f_out:
+            with gzip.open(dst, "wb", compresslevel=level) as f_out:
                 shutil.copyfileobj(f_in, f_out)
         elapsed = time.perf_counter() - start
         orig_size = src.stat().st_size

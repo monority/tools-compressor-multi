@@ -34,7 +34,7 @@ def compress_pdf(src: Path, dst: Path, opts: dict[str, Any]) -> Path:
                         resized = pil_img.resize(new_size, Image.LANCZOS)
                         buf = io.BytesIO()
                         resized.save(buf, format="JPEG", quality=60, optimize=True)
-                        doc.replace_image(xref, buf.getvalue())
+                        page.replace_image(xref, stream=buf.getvalue())
                 except (AttributeError, KeyError, OSError, ValueError, TypeError, RuntimeError) as exc:
                     logger.debug("PDF image optimization skipped for xref %s: %s", xref, exc)
 
